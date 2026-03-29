@@ -1,0 +1,83 @@
+name: mri
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - ipykernel
+  - jupyterlab
+  - matplotlib-base
+  - mpfr=4.2.1
+  - numpy=2.3.0
+  - pip=26.0.1
+  - pyopengl
+  - pytest
+  - python-mumps
+  - requests
+  - setuptools
+  - statsmodels
+  - eigen=3.4.0           # required for pycork build
+  - pip:
+    # SimNIBS dependencies (Linux x86_64)
+    - git+https://github.com/simnibs/brainnet@v0.2
+    - git+https://github.com/simnibs/brainsynth@v0.1
+    - https://github.com/simnibs/cortech/releases/download/v0.1/cortech-0.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
+    - https://github.com/simnibs/fmm3dpy/releases/download/v1.0.4/fmm3dpy-1.0.4-cp311-cp311-manylinux_2_28_x86_64.whl
+    - https://github.com/simnibs/petsc4py/releases/download/v3.22.2/petsc4py-3.22.2-cp311-cp311-manylinux_2_28_x86_64.whl
+    - https://github.com/oulap/samseg_wheels/releases/download/dev/samseg-0.5a0-cp311-cp311-manylinux_2_28_x86_64.whl
+    # SimNIBS本体 (Linux x86_64)
+    - https://github.com/simnibs/simnibs/releases/download/v4.6.0/simnibs-4.6.0-cp311-cp311-linux_x86_64.whl
+    # Registration / MRI
+    - antspyx
+    - nibabel
+    - nilearn
+    - nipype
+    - pybids
+    - templateflow
+    # Simulation
+    - BabelViscoFDTD
+    - cupy-cuda12x         # CUDA 12.x backend for BabelBrain
+    # Utilities
+    - gmsh==4.14.0
+    - h5py==3.15.1
+    - numba==0.64.0
+    - pygpc==0.4.4
+    - scipy==1.17.1
+    - matplotlib>=3.9
+    - pandas>=2.0
+    - patsy>=1.0
+    - statsmodels>=0.14.4
+    - pynput               # import error on headless OK; use USE_PYNPUT=False
+    - itables
+    - openpyxl
+    - vtk
+    # PyTorch (CPU build for Linux — GPU handled by cupy/CUDA)
+    - https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-linux_x86_64.whl
+
+# ⚠️  POST-INSTALL STEPS REQUIRED (cannot be automated via YML):
+#
+# 1. pycork (pybind11 must be upgraded manually for Python 3.11):
+#
+#    cd ~
+#    git clone https://github.com/drlukeparry/pycork.git
+#    cd pycork
+#    git checkout d9efcd1da212c685345f65503ba253373dcdece0
+#    git submodule update --init --recursive
+#    cd external/pybind11 && git fetch && git checkout v2.11.0 && cd ../..
+#    pip install .
+#
+# 2. BabelBrain (no pyproject.toml — install via PYTHONPATH):
+#
+#    cd ~
+#    git clone https://github.com/ProteusMRIgHIFU/BabelBrain.git
+#    echo "export BABELBRAIN_DIR=~/BabelBrain" >> ~/.bashrc
+#    echo "export PYTHONPATH=~/BabelBrain:\$PYTHONPATH" >> ~/.bashrc
+#    source ~/.bashrc
+#
+# 3. CUDA module (required every session):
+#
+#    module load cuda/12.9.0-cinr
+#
+# 4. NOT AVAILABLE on Linux (skip):
+#    - metalcomputebabel  (macOS Metal only)
+#    - pynput GUI mode    (use USE_PYNPUT=False on HPC)

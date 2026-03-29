@@ -1,0 +1,9 @@
+# Version: 13
+# Coordinate system: NIfTI:Scanner
+# Created by: PlanTUS_to_Brainsight (fixed)
+# Units: millimetres, degrees, milliseconds, and microvolts
+# Encoding: UTF-8
+# Notes: Each column is delimited by a tab. Each value within a column is delimited by a semicolon.
+# Target Name	Loc. X	Loc. Y	Loc. Z	m0n0	m0n1	m0n2	m1n0	m1n1	m1n2	m2n0	m2n1	m2n2
+sub-YK_T1w_aMCC_NeuroSynthTopic112_L_target	2.6371	36.6729	44.0746	0.5514	0.8340	-0.0190	-0.7573	0.5100	0.4080	0.3500	-0.2106	0.9128
+sub-YK_T1w_aMCC_NeuroSynthTopic112_L_entry	1.8495	53.5637	81.8640	0.5514	0.8340	-0.0190	-0.7573	0.5100	0.4080	0.3500	-0.2106	0.9128

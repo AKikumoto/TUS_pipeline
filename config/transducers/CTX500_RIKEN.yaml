@@ -1,0 +1,56 @@
+# CTX-500-4CH Transducer Specifications
+# Source: NeuroFUS PRO V2.0 S/N: 039  |  CTX-500-4CH S/N: 056
+# Test Report: resources/TUS/setup/RIKEN_CTX-500_Shibata_Lab_TestReport_NeuroFUS_PROV2.0_SN_039.pdf
+# Calibration date: 16 December 2022
+# Manufacturer: Sonic Concepts / Brainbox Ltd
+
+id: CTX500
+babelbrain_id: "CTX_500"          # BabelBrain TxSystem name
+name: "CTX-500-4CH"
+system_serial: "NeuroFUS-PRO-V2.0-SN039"
+transducer_serial: "CTX-500-4CH-SN056"
+
+# Acoustic properties
+frequency_kHz: 500
+active_diameter_mm: 64.0
+radius_of_curvature_mm: 63.2       # geometric focus radius
+geometric_focal_depth_mm: 52.4     # from exit plane to geometric focus
+
+# Focal steering range (from exit plane)
+min_focal_depth_mm: 41.4
+max_focal_depth_mm: 69.7
+
+# Mechanical constraints
+transducer_diameter_mm: 64
+max_angle_deg: 10                   # maximum allowed tilt (axial only)
+
+# Coupling
+coupling: "solid_water_dome"
+plane_offset_mm: 10.82             # offset from radiating surface to exit plane
+additional_offset_mm: 0            # gel/pad offset (adjust per experiment)
+
+# Calibrated focal positions (TPO setting → measured FLHM center, exit plane ref)
+# Source: Table IV in test report
+calibration:
+  tpo_settings_mm:       [41.4, 43.2, 45.1, 47.4, 49.8, 52.8, 57.1, 63.3, 66.5, 69.7]
+  flhm_center_mm:        [41.5, 43.3, 45.3, 47.7, 49.9, 53.2, 57.4, 63.4, 66.5, 69.8]
+  axial_flhm_mm:         [13.0, 14.4, 15.1, 16.2, 16.8, 19.8, 23.8, 31.6, 33.6, 36.7]
+  isppa_w_per_cm2:       [31.6, 31.5, 30.8, 30.5, 31.4, 30.3, 30.4, 30.0, 30.6, 29.3]
+  positional_error_pct:  [0.0,  0.1,  0.5,  0.7,  0.2,  0.8,  0.4,  0.3,  0.0,  0.2]
+
+# PlanTUS integration
+scene_template: "TUSTransducerPlacementPlanning_TEMPLATE_CTX500.scene"
+transducer_model: "TRANSDUCER-NEUROFUS-CTX-500-4_DEVICE.surf.gii"
+plantus_distance_scale: [0.0, 0.0, 50.0, 70.0]  # colorbar scale for Workbench scene
+
+# BabelBrain transducer calibration (r0.8.0+)
+# Requires Excel intensity profile data from vendor — not available yet.
+# Request from Brainbox Ltd: "intensity profile data used for axial steering report"
+# Reference: https://proteusmrighifu.github.io/BabelBrain/Advanced/TransducerCalibration.html
+babelbrain_calibration:
+  excel_file: null           # fill in after receiving from Brainbox
+  excel_range: null          # e.g. Sheet1!T20:AJ81
+  frequency: 5.0e+5          # Hz
+  lambda: 1.0e-4
+  output_path: null          # path to save CALIBRATION.h5 (unique per S/N)
+  calibration_h5: null       # fill in after running calibration

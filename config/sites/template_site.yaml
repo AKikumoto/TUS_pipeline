@@ -1,0 +1,39 @@
+# Site Configuration Template — fill in for new sites
+# Naming convention: site_[SITE]_[STATION].yaml
+#   SITE    = RIKEN | UMD | Brown | Iowa | ...
+#   STATION = AK (user) | MAC1 | SHARED | ...
+# Copy this file, rename accordingly, and fill in all TBD fields
+#
+# NOTE: This config is only needed when using the Python-based pipeline
+# (scripts/TUS/src/). If using an all-in-one neuronavigation system
+# (e.g., Rogue) that handles segmentation, targeting, and simulation
+# internally, this file is not required.
+
+site: SITE_NAME                    # e.g. Brown, Iowa, UCL
+station: STATION_ID                # e.g. AK, MAC1, SHARED
+
+# Hardware
+transducer: MODEL_SITE             # e.g. CTX500_RIKEN, DPX500_UMD, DPX500_Brown
+                                   # see config/transducers/ for available files
+neuronavigation: Brainsight        # Brainsight | other
+brainsight_version: "TBD"         # check Help > About in Brainsight
+coordinate_system: "NIfTI:Scanner" # confirm in Brainsight preferences
+
+# Pipeline choices
+segmentation: SimNIBS              # SPM | SimNIBS
+targeting: PlanTUS                 # CoM | PlanTUS
+acoustic_sim: Brainsight           # kWave | Brainsight | BabelBrain
+thermal_sim: Brainsight            # Brainsight | BabelBrain
+
+# Software paths (update per machine)
+simnibs_python: "TBD"              # e.g. /Applications/SimNIBS-4.5/simnibs_env/bin/python
+simnibs_site_packages: "TBD"
+fsl_bin: "TBD"                     # e.g. ~/fsl/bin
+workbench_bin: "TBD"               # e.g. /Applications/workbench/bin_macosxub
+freesurfer_home: "TBD"             # e.g. /Applications/freesurfer/8.1.0
+babelbrain_dir: "TBD"              # e.g. /Applications/BabelBrain.app (macOS) | ~/BabelBrain (Linux/HPC)
+
+# Data paths (update per machine)
+data_root: "TBD"
+sub_list_dir: "TBD"
+atlases_dir: "TBD"

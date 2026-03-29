@@ -1,0 +1,37 @@
+# Site Configuration — Brown University CCV Oscar HPC, Station: AK (Atsushi Kikumoto)
+# Setup guide: config/HPC/Brown_Oscar/oscar_setup_guide.md
+# Conda env:   config/HPC/Brown_Oscar/mri_environment_oscar.yml
+
+site: Brown
+station: Oscar_AK
+
+# Hardware
+transducer: DPX500_UMD             # see config/transducers/DPX500_UMD.yaml
+neuronavigation: Brainsight
+brainsight_version: "TBD"
+coordinate_system: "NIfTI:Scanner"
+
+# Pipeline choices
+segmentation: SimNIBS              # SPM | SimNIBS
+targeting: PlanTUS                 # CoM | PlanTUS
+acoustic_sim: BabelBrain           # kWave | Brainsight | BabelBrain
+thermal_sim: BabelBrain            # Brainsight | BabelBrain
+
+# Software paths (Oscar)
+# Note: Step 4 (PlanTUS / wb_view) runs on local Mac only — no workbench needed here
+fsl_bin: "/oscar/rt/sw/external/fsl/6.0.7.19/bin"
+freesurfer_home: "/oscar/rt/9.6/25/spack/x86_64_v3/freesurfer-8.0.0-7ye67oyjdgqb4nunskhyxvpaptktqvtw"
+babelbrain_dir: "~/BabelBrain"     # cloned via: git clone https://github.com/ProteusMRIgHIFU/BabelBrain.git
+
+# Oscar modules to load before running
+# module load fsl/6.0.7.19s-jqc4
+# module load freesurfer/8.0.0-7ye6
+# module load cuda/12.9.0-cinr
+
+# Scheduler (SLURM)
+scheduler: slurm
+scratch_dir: "/oscar/scratch/akikumot"
+
+# Data paths (Oscar)
+data_root: "/oscar/data/dbadre/akikumot/TUS"
+atlases_dir: "TBD"                 # e.g. /oscar/data/dbadre/akikumot/atlases

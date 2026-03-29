@@ -1,0 +1,60 @@
+# DPX-500-4CH Transducer Specifications — UMD Unit
+# Source: NeuroFUS PRO V2.0 S/N: 104  |  DPX-500-4CH S/N: 048
+# Test Report: resources/TUS/setup/UMD_DPX-500-4CH SN-48 NF SN-104 Brainbox (University of Maryland) - Rev A.pdf
+# Calibration date: 18 December 2025
+# Manufacturer: Sonic Concepts / Brainbox Ltd
+
+id: DPX500
+name: "DPX-500-4CH"
+system_serial: "NeuroFUS-PRO-V2.0-SN104"
+transducer_serial: "DPX-500-4CH-SN048"
+
+# Acoustic properties
+frequency_kHz: 500
+active_diameter_mm: 64.0
+radius_of_curvature_mm: 150.0      # geometric focus radius (ROC)
+geometric_focal_depth_mm: 144.9    # from exit plane to geometric focus
+
+# Focal steering range (from exit plane)
+# Calibrated and TPO-compensated range per test report
+min_focal_depth_mm: 60.0
+max_focal_depth_mm: 120.0
+
+# Mechanical constraints
+transducer_diameter_mm: 64
+max_angle_deg: 10                   # maximum allowed tilt (axial only)
+
+# Coupling
+coupling: "BCS-NF10"               # Bladder Coupling System, 10 mm offset
+plane_offset_mm: 10.0              # coupling offset (BCS-NF10 = 10 mm)
+additional_offset_mm: 0            # gel/pad offset (adjust per experiment)
+
+# Calibrated focal positions (TPO setting → measured FLHM center, exit plane ref)
+# Source: Acoustic Calibration table in test report (16 TPO positions)
+calibration:
+  tpo_settings_mm:   [60.0, 64.0,  68.0,  72.0,  76.0,  80.0,  84.0,  88.0,  92.0,  96.0, 100.0, 104.0, 108.0, 112.0, 116.0, 120.0]
+  flhm_center_mm:    [60.4, 64.5,  68.1,  72.5,  76.4,  80.4,  84.3,  88.2,  92.2,  96.3, 100.5, 104.4, 108.4, 112.4, 116.4, 120.8]
+  axial_flhm_mm:     [24.1, 29.2,  31.5,  35.1,  38.2,  38.2,  41.7,  46.4,  50.0,  53.4,  55.4,  57.8,  62.2,  66.8,  69.6,  71.7]
+  positional_error_pct: [0.6, 0.8, 0.1,   0.7,   0.5,   0.5,   0.4,   0.2,   0.3,   0.4,   0.5,   0.4,   0.3,   0.3,   0.4,   0.7]
+
+# NOTE: PlanTUS_wrapper_DPX500.py currently uses a different focal_distance_list
+# (53.0–112.7 mm, 12 points) derived from an earlier test report.
+# The values above (from the UMD unit test report, Dec 2025) should be used
+# when updating the wrapper or creating a new site config for UMD.
+
+# PlanTUS integration
+scene_template: "TUSTransducerPlacementPlanning_TEMPLATE_DPX500.scene"
+transducer_model: "TRANSDUCER-NEUROFUS-CTX-500-4_DEVICE.surf.gii"  # placeholder; update with DPX model if available
+plantus_distance_scale: [0.0, 0.0, 90.0, 130.0]  # colorbar scale for Workbench scene
+
+# BabelBrain transducer calibration (r0.8.0+)
+# Requires Excel intensity profile data from vendor — not available yet.
+# Request from Brainbox Ltd: "intensity profile data used for axial steering report"
+# Reference: https://proteusmrighifu.github.io/BabelBrain/Advanced/TransducerCalibration.html
+babelbrain_calibration:
+  excel_file: null           # fill in after receiving from Brainbox
+  excel_range: null          # e.g. Sheet1!T20:AJ81
+  frequency: 5.0e+5          # Hz
+  lambda: 1.0e-4
+  output_path: null          # path to save CALIBRATION.h5 (unique per S/N)
+  calibration_h5: null       # fill in after running calibration

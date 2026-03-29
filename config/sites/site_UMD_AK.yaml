@@ -1,0 +1,29 @@
+# Site Configuration — University of Maryland (CFD Lab), Station: AK (Atsushi Kikumoto)
+# Transducer test report: resources/TUS/setup/UMD_DPX-500-4CH SN-48 NF SN-104 Brainbox (University of Maryland) - Rev A.pdf
+
+site: UMD
+station: AK                        # user/machine identifier; add MAC1, SHARED, etc. as needed
+
+# Hardware
+transducer: DPX500_UMD             # see config/transducers/DPX500_UMD.yaml
+neuronavigation: Brainsight
+brainsight_version: "TBD"          # confirm version in use at UMD
+coordinate_system: "NIfTI:S:Scanner"
+
+# Pipeline choices
+segmentation: SimNIBS              # SPM | SimNIBS
+targeting: PlanTUS                 # CoM | PlanTUS
+acoustic_sim: Brainsight           # kWave | Brainsight
+thermal_sim: Brainsight            # Brainsight only for now
+
+# Software paths (local machine — fill in for UMD)
+simnibs_python: "TBD"
+simnibs_site_packages: "TBD"
+fsl_bin: "TBD"
+workbench_bin: "TBD"
+freesurfer_home: "TBD"
+
+# Data paths (fill in for UMD)
+data_root: "TBD"
+sub_list_dir: "TBD"
+atlases_dir: "TBD"

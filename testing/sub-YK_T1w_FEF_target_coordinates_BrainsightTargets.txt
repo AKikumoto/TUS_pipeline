@@ -1,0 +1,9 @@
+# Version: 13
+# Coordinate system: NIfTI:Scanner
+# Created by: Brainsight 2.5.1
+# Units: millimetres, degrees, milliseconds, and microvolts
+# Encoding: UTF-8
+# Notes: Each column is delimited by a tab. Each value within a column is delimited by a semicolon.
+# Target Name	Loc. X	Loc. Y	Loc. Z	m0n0	m0n1	m0n2	m1n0	m1n1	m1n2	m2n0	m2n1	m2n2
+FEF_R_Target	31.1022	7.3292	42.4852	0.0	0.0	-1.0	-1.0	0.0	0.0	0.0	-1.0	0.0
+FEF_L_Target	-20.1311	5.4122	47.9367	0.0	0.0	-1.0	-1.0	0.0	0.0	0.0	-1.0	0.0

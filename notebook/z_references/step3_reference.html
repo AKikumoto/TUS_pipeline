@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 3 reference</title>
+</head>
+<body style="margin:24px auto;max-width:900px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+
+<style>
+.s3-wrap *{box-sizing:border-box}
+.s3-wrap{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#1a1a1a;max-width:860px;margin:0 auto}
+.s3-card{background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.s3-phase-bar{display:flex;align-items:stretch;border-radius:8px;overflow:hidden;border:1px solid #e0e0e0;margin-bottom:10px}
+.s3-phase-col{flex:1;padding:10px 8px;text-align:center}
+.s3-phase-label{font-size:12px;font-weight:600;margin-bottom:4px}
+.s3-phase-sub{font-size:11px;opacity:.85;line-height:1.5}
+.s3-ph-teal{background:#E1F5EE;color:#085041}
+.s3-ph-purple{background:#EEEDFE;color:#3C3489}
+.s3-ph-amber{background:#FAEEDA;color:#633806}
+.s3-ph-green{background:#EAF3DE;color:#27500A}
+.s3-ph-divider{width:1px;background:#e0e0e0;flex-shrink:0}
+.s3-sec-title{font-size:12px;font-weight:600;color:#555;margin:0 0 6px}
+.s3-wrap table{width:100%;border-collapse:collapse;font-size:12px}
+.s3-wrap th{text-align:left;color:#555;font-weight:600;padding:4px 8px;border-bottom:1px solid #e0e0e0}
+.s3-wrap td{text-align:left;padding:4px 8px;border-bottom:1px solid #e0e0e0;color:#1a1a1a;vertical-align:top}
+.s3-wrap tr:last-child td{border-bottom:none}
+.s3-wrap code{font-family:'SFMono-Regular',Consolas,monospace;font-size:11px;background:#efefef;padding:1px 4px;border-radius:4px;color:#c7254e}
+.s3-badge{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;background:#E1F5EE;color:#085041}
+.s3-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.s3-io-list{font-size:12px;margin:0;padding-left:16px;line-height:1.9;color:#1a1a1a}
+.s3-note{font-size:11px;color:#888;font-style:italic}
+.s3-badge-warn{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;background:#FFF3CD;color:#856404;border:1px solid #FFDCA0}
+.s3-title-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.s3-title-row h3{margin:0;font-size:15px;font-weight:600;color:#1a1a1a}
+.s3-title-row span{font-size:12px;color:#888}
+.s3-opt{white-space:nowrap}
+</style>
+
+<div class="s3-wrap">
+
+<div class="s3-title-row">
+  <h3>Step 3 — Inverse registration</h3>
+  <span>MNI → native space</span>
+</div>
+
+<div class="s3-card" style="padding:16px 16px 14px">
+<svg width="100%" viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- Inputs -->
+<rect x="4" y="14" width="88" height="28" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" x="48" y="28" text-anchor="middle" dominant-baseline="central" fill="#085041">MNI mask</text>
+<rect x="4" y="54" width="88" height="28" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" x="48" y="68" text-anchor="middle" dominant-baseline="central" fill="#085041">T1 native</text>
+
+<!-- bracket -->
+<line x1="92" y1="28" x2="104" y2="28" stroke="#888" stroke-width="1"/>
+<line x1="92" y1="68" x2="104" y2="68" stroke="#888" stroke-width="1"/>
+<line x1="104" y1="28" x2="104" y2="68" stroke="#888" stroke-width="1"/>
+<line x1="104" y1="48" x2="118" y2="48" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Registration -->
+<rect x="120" y="28" width="106" height="40" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="173" y="44" text-anchor="middle" dominant-baseline="central" fill="#3C3489">Registration</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="173" y="60" text-anchor="middle" dominant-baseline="central" fill="#534AB7">ANTs / fmriprep</text>
+<line x1="226" y1="48" x2="244" y2="48" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Apply transform -->
+<rect x="246" y="28" width="112" height="40" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="302" y="44" text-anchor="middle" dominant-baseline="central" fill="#3C3489">Apply transform</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="302" y="60" text-anchor="middle" dominant-baseline="central" fill="#534AB7">mask / funcmap</text>
+<line x1="358" y1="48" x2="376" y2="48" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Native mask -->
+<rect x="378" y="28" width="94" height="40" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="425" y="44" text-anchor="middle" dominant-baseline="central" fill="#085041">Native mask</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="425" y="60" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">.nii.gz</text>
+
+<!-- Native mask → QC -->
+<line x1="400" y1="68" x2="400" y2="82" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- QC -->
+<rect x="356" y="84" width="94" height="40" rx="6" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="403" y="100" text-anchor="middle" dominant-baseline="central" fill="#633806">QC overlay</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="403" y="116" text-anchor="middle" dominant-baseline="central" fill="#854F0B">PNG figures</text>
+
+<!-- Native mask → Target coord -->
+<line x1="472" y1="48" x2="490" y2="48" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Target coord -->
+<rect x="492" y="28" width="94" height="40" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="539" y="44" text-anchor="middle" dominant-baseline="central" fill="#27500A">Target coord</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="539" y="60" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">CoM / peak</text>
+<line x1="586" y1="48" x2="604" y2="48" stroke="#888" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- BrainSight -->
+<rect x="606" y="28" width="90" height="40" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+<text font-family="-apple-system,sans-serif" font-size="12" font-weight="500" x="651" y="44" text-anchor="middle" dominant-baseline="central" fill="#27500A">BrainSight</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="651" y="60" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">/ Step 4</text>
+
+<!-- Functional map dashed branch -->
+<text font-family="-apple-system,sans-serif" font-size="11" font-style="italic" x="4" y="148" dominant-baseline="central" fill="#888">Functional map</text>
+<line x1="96" y1="148" x2="302" y2="148" stroke="#888" stroke-width="0.8" stroke-dasharray="4 3"/>
+<line x1="302" y1="148" x2="302" y2="70" stroke="#888" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<line x1="302" y1="148" x2="460" y2="148" stroke="#888" stroke-width="0.8" stroke-dasharray="4 3"/>
+<line x1="460" y1="148" x2="460" y2="126" stroke="#888" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<text font-family="-apple-system,sans-serif" font-size="11" font-style="italic" x="466" y="115" dominant-baseline="central" fill="#888">native funcmap</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="466" y="130" dominant-baseline="central" fill="#888">(optional)</text>
+<!-- ROI union mask dashed branch -->
+<text font-family="-apple-system,sans-serif" font-size="11" font-style="italic" x="4" y="170" dominant-baseline="central" fill="#aaa">ROI union mask</text>
+<line x1="96" y1="170" x2="246" y2="170" stroke="#aaa" stroke-width="0.8" stroke-dasharray="2 2"/>
+<line x1="246" y1="170" x2="246" y2="70" stroke="#aaa" stroke-width="0.8" stroke-dasharray="2 2" marker-end="url(#arr)"/>
+<text font-family="-apple-system,sans-serif" font-size="11" font-style="italic" x="560" y="115" dominant-baseline="central" fill="#aaa">combined mask</text>
+<text font-family="-apple-system,sans-serif" font-size="11" x="560" y="130" dominant-baseline="central" fill="#aaa">(union, optional)</text>
+</svg>
+</div>
+
+<!-- Phase bar -->
+<div class="s3-phase-bar">
+  <div class="s3-phase-col s3-ph-teal">
+    <div class="s3-phase-label">&#9312; Init</div>
+    <div class="s3-phase-sub">Load config<br>Load T1</div>
+  </div>
+  <div class="s3-ph-divider"></div>
+  <div class="s3-phase-col s3-ph-purple">
+    <div class="s3-phase-label">&#9313; Registration</div>
+    <div class="s3-phase-sub">Intensity norm<br>Register<br>Apply warp</div>
+  </div>
+  <div class="s3-ph-divider"></div>
+  <div class="s3-phase-col s3-ph-amber">
+    <div class="s3-phase-label">&#9314; QC</div>
+    <div class="s3-phase-sub">Mask overlay<br>Reg check</div>
+  </div>
+  <div class="s3-ph-divider"></div>
+  <div class="s3-phase-col s3-ph-green">
+    <div class="s3-phase-label">&#9315; Output</div>
+    <div class="s3-phase-sub">CoM / peak<br>&#8594; BrainSight</div>
+  </div>
+</div>
+
+<div class="s3-card">
+  <div class="s3-sec-title">SETTINGS AT A GLANCE</div>
+  <table>
+    <tr><th>Variable</th><th>What it is</th></tr>
+    <tr>
+      <td class="s3-opt"><code>REGISTRATION_MODE</code></td>
+      <td>Registration engine. Run ANTs from scratch, or reuse a pre-computed warp from fmriprep.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>INTENSITY_NORM</code> <span class="s3-note">ANTs only</span></td>
+      <td>How to normalise the MNI template intensity before registration. Affects convergence at different field strengths.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>REGISTRATION_TYPE</code> <span class="s3-note">ANTs only</span></td>
+      <td>Deformable transform type. Single-step SyN or two-step Affine + SyNCC.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>TARGET_MODE</code></td>
+      <td>How to derive the TUS target coordinate from the warped native mask.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>FMRIPREP_WARP</code> <span class="s3-note">fmriprep only</span></td>
+      <td>Path to the pre-computed MNI&#8594;T1w composite warp (<code>*_xfm.h5</code>) from fmriprep.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>ROI_UNION_FILE</code> <span class="s3-badge-warn">untested</span></td>
+      <td>Optional second MNI-space mask.  Warped to native space and combined with <code>MASK_FILE</code> via logical OR.  When set, all target-coordinate modes operate on the combined mask.  Leave empty to use <code>MASK_FILE</code> alone.<br><span class="s3-note">&#9888; This feature has not been validated on real data. Verify the combined mask visually before using the resulting coordinate.</span></td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>ROI_UNION_LABEL</code> <span class="s3-badge-warn">untested</span></td>
+      <td>Short label for the ROI union mask; used in output filenames and figure titles (e.g. <code>{MASK_LABEL}_union_{ROI_UNION_LABEL}_native.nii.gz</code>).</td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>LR_SPLIT</code></td>
+      <td>When <code>True</code>, splits the warped native mask into left and right hemispheres using a pre-built hemisphere map (<code>MNI_hemispheres_BN_1mm.nii.gz</code>). Saves <code>_L.nii.gz</code> / <code>_R.nii.gz</code> and reports per-hemisphere CoM in Step 3e. Works for any <code>MASK_FILE</code>.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="s3-card">
+  <div class="s3-sec-title">LR SPLIT</div>
+  <table>
+    <tr><th>Setting</th><th>Behaviour</th></tr>
+    <tr><td class="s3-opt"><code>LR_SPLIT = False</code> <span class="s3-badge">default</span></td><td>No hemisphere split. Only the bilateral native mask is saved.</td></tr>
+    <tr><td class="s3-opt"><code>LR_SPLIT = True</code></td><td>Warps <code>MNI_hemispheres_BN_1mm.nii.gz</code> (L=1, R=2) to native space and intersects with the mask.<br>Outputs <code>*_mask_native_L.nii.gz</code> and <code>*_mask_native_R.nii.gz</code>.<br>CoM is reported per hemisphere in Step 3e.<br><span class="s3-note">Requires <code>masks/standardized/MNI_hemispheres_BN_1mm.nii.gz</code> — generated once by <code>z_make_hemisphere_mask.py</code>.</span></td></tr>
+  </table>
+</div>
+
+<div class="s3-card">
+  <div class="s3-sec-title">REGISTRATION MODE</div>
+  <table>
+    <tr><th>Mode</th><th>When to use</th><th>Transform source</th></tr>
+    <tr>
+      <td class="s3-opt"><code>"ants"</code></td>
+      <td>No fmriprep; run ANTs from scratch</td>
+      <td>Computed here &#8594; saved to <code>ants_transforms/</code></td>
+    </tr>
+    <tr>
+      <td class="s3-opt"><code>"fmriprep"</code></td>
+      <td>fmriprep already run; reuse its warp</td>
+      <td><code>fmriprep/sub-*/anat/*.h5</code></td>
+    </tr>
+  </table>
+</div>
+
+<div class="s3-row2">
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">INTENSITY NORM <span class="s3-note">&#8212; ANTs only</span></div>
+    <table>
+      <tr><th>Setting</th><th>Best for</th></tr>
+      <tr><td class="s3-opt"><code>"histogram_match"</code> <span class="s3-badge">default</span></td><td>3T</td></tr>
+      <tr><td class="s3-opt"><code>"imath_normalize"</code></td><td>7T / LC mask</td></tr>
+      <tr><td class="s3-opt"><code>"none"</code></td><td>Quick test</td></tr>
+    </table>
+  </div>
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">REGISTRATION TYPE <span class="s3-note">&#8212; ANTs only</span></div>
+    <table>
+      <tr><th>Setting</th><th>Notes</th></tr>
+      <tr><td class="s3-opt"><code>"SyN"</code> <span class="s3-badge">default</span></td><td>Fast; good for 3T aMCC / amygdala</td></tr>
+      <tr><td class="s3-opt"><code>"SyNCC"</code></td><td>Slower; better for 7T LC</td></tr>
+    </table>
+  </div>
+</div>
+<div style="margin-bottom:10px"></div>
+
+<div class="s3-card">
+  <div class="s3-sec-title">TARGET MODE</div>
+  <table>
+    <tr><th>Setting</th><th>Method</th></tr>
+    <tr><td class="s3-opt"><code>"CoM"</code> <span class="s3-badge">default</span></td><td>Centre of mass of thresholded native mask (or union mask when <code>ROI_UNION_FILE</code> is set)</td></tr>
+    <tr><td class="s3-opt"><code>"peak_func"</code></td><td>Peak voxel of functional map within native mask (or union mask) &#8212; requires <code>FUNC_MAP_FILE</code></td></tr>
+    <tr><td class="s3-opt"><code>"skip"</code></td><td>No coordinate computation (mask QC only)</td></tr>
+  </table>
+</div>
+
+<div class="s3-row2">
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">INPUTS REQUIRED</div>
+    <ul class="s3-io-list">
+      <li>Site YAML <code>config/sites/</code></li>
+      <li>Native T1 NIfTI (auto-located via site config)</li>
+      <li>MNI mask <code>masks/standardized/</code><br><span class="s3-note">MNI152NLin2009cAsym 1 mm</span></li>
+      <li><span class="s3-note">fmriprep mode:</span> <code>*_xfm.h5</code></li>
+      <li><span class="s3-note">peak_func mode:</span> MNI funcmap</li>
+    </ul>
+  </div>
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">OUTPUTS</div>
+    <ul class="s3-io-list">
+      <li><code>*_mask_native.nii.gz</code></li>
+      <li><code>*_native.nii.gz</code> <span class="s3-note">peak_func only</span></li>
+      <li><code>*_union_*_native.nii.gz</code> <span class="s3-note">ROI_UNION_FILE only</span></li>
+      <li><code>*_mask_native_L/R.nii.gz</code> <span class="s3-note">LR_SPLIT only</span></li>
+      <li><code>figures/*_native_overlay.png</code></li>
+      <li><code>figures/*_union_*_overlay.png</code> <span class="s3-note">ROI_UNION_FILE only</span></li>
+      <li><code>figures/*_regcheck.png</code> <span class="s3-note">ANTs only</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="s3-row2">
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">DEPENDENCIES</div>
+    <table>
+      <tr><th>Package</th><th>Used for</th></tr>
+      <tr><td><code>antspyx</code></td><td>ANTs registration, image I/O, transforms</td></tr>
+      <tr><td><code>nibabel</code></td><td>NIfTI file I/O</td></tr>
+      <tr><td><code>nilearn</code></td><td>Visualisation, image resampling</td></tr>
+      <tr><td><code>templateflow</code></td><td>MNI152NLin2009cAsym T1 template</td></tr>
+      <tr><td><code>scipy</code></td><td>Centre-of-mass computation</td></tr>
+      <tr><td><code>src/utils.py</code></td><td>Shared pipeline utilities</td></tr>
+    </table>
+  </div>
+  <div class="s3-card" style="margin-bottom:0">
+    <div class="s3-sec-title">REFERENCES</div>
+    <table>
+      <tr><th>Tool</th><th>Citation</th></tr>
+      <tr><td>ANTs / antspyx</td><td>Avants et al. (2011) <em>NeuroImage</em> 54(3):2033&#8211;2044 &nbsp;&#124;&nbsp; <a style="color:#185FA5;font-size:11px" href="https://github.com/ANTsX/ANTsPy">github.com/ANTsX/ANTsPy</a></td></tr>
+      <tr><td>templateflow</td><td>Ciric et al. (2022) <em>Nature Methods</em> 19:1568&#8211;1571</td></tr>
+      <tr><td>nilearn</td><td>Abraham et al. (2014) <em>Front. Neuroinform.</em> 8:14</td></tr>
+    </table>
+  </div>
+</div>
+<div style="margin-bottom:10px"></div>
+
+<div class="s3-card">
+  <div class="s3-sec-title">COORDINATE SYSTEM</div>
+  <p style="font-size:12px;margin:0 0 8px">All BrainSight output files use <strong>NIfTI:Scanner (RAS)</strong> coordinates
+  (x&nbsp;=&nbsp;Right+, y&nbsp;=&nbsp;Anterior+, z&nbsp;=&nbsp;Superior+).</p>
+  <table>
+    <tr><th>Output path</th><th>Source function</th><th>How RAS is guaranteed</th></tr>
+    <tr>
+      <td class="s3-opt">CoM target<br><span class="s3-note">TARGET_MODE&nbsp;=&nbsp;"CoM"</span></td>
+      <td><code>compute_com_native()</code></td>
+      <td>ANTs/ITK <code>origin</code> and <code>direction</code> are in <strong>LPS</strong>.
+          <code>apply_affine</code> therefore returns LPS mm.
+          The function multiplies x, y by −1 before returning to produce <strong>RAS</strong>.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt">Peak functional target<br><span class="s3-note">TARGET_MODE&nbsp;=&nbsp;"peak_func"</span></td>
+      <td><code>compute_peak_native()</code></td>
+      <td>Identical LPS → RAS conversion as the CoM path.</td>
+    </tr>
+    <tr>
+      <td class="s3-opt">PlanTUS entry &amp; focus<br><span class="s3-note">Step&nbsp;4</span></td>
+      <td><code>get_vtx_coordinates()</code></td>
+      <td>SimNIBS writes <code>.surf.gii</code> and <code>focus_position_matrix_*.txt</code>
+          in <strong>RAS</strong> directly.  No LPS → RAS flip is needed or applied.</td>
+    </tr>
+  </table>
+</div>
+
+</div>
+
+</body>
+</html>

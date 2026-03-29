@@ -1,0 +1,35 @@
+# Site Configuration — RIKEN (Shibata Lab), Station: AK (Atsushi Kikumoto)
+# Transducer test report: resources/TUS/setup/RIKEN_CTX-500_Shibata_Lab_TestReport_NeuroFUS_PROV2.0_SN_039.pdf
+
+site: RIKEN
+station: AK                        # user/machine identifier; add MAC1, SHARED, etc. as needed
+
+# Hardware
+transducer: CTX500_RIKEN           # see config/transducers/CTX500_RIKEN.yaml
+neuronavigation: Brainsight
+brainsight_version: "2.5.1"
+coordinate_system: "NIfTI:S:Scanner"
+
+# Pipeline choices
+segmentation: SimNIBS              # SPM | SimNIBS
+targeting: PlanTUS                 # CoM | PlanTUS
+acoustic_sim: BabelBrain           # kWave | Brainsight | BabelBrain
+thermal_sim: BabelBrain            # Brainsight | BabelBrain
+num_threads: 8                     # CPU threads for charm (matches charm.ini); also sets OPENBLAS/OMP env vars
+
+# Software paths (local machine — update per user)
+# simnibs_python and simnibs_site_packages are not needed when running in the
+# mri conda environment (SimNIBS 4.6.0 is installed there directly via pip).
+# Uncomment and update only if using a standalone SimNIBS installation instead.
+# simnibs_python: "/Users/atsushikikumoto/Applications/SimNIBS-4.5/simnibs_env/bin/python"
+# simnibs_site_packages: "/Users/atsushikikumoto/Applications/SimNIBS-4.5/simnibs_env/lib/python3.11/site-packages"
+fsl_bin: "~/fsl/bin"
+workbench_bin: "/Applications/workbench/bin_macosxub"
+freesurfer_home: "/Applications/freesurfer/8.1.0"
+babelbrain_dir: "/Applications/BabelBrain.app"
+
+# Data paths (local — update per user)
+data_root: "~/Dropbox/w_SCRIPTS/P.TUSPractice/"
+# sub_list_dir: "SUB_LIST_PREP"      # relative to data_root  [original]
+sub_list_dir: "SUB_LIST_TEST"  # TEMP — ~/Dropbox is a symlink, no spaces in path
+atlases_dir: "~/Dropbox/w_ONGOINGANY/atlases"

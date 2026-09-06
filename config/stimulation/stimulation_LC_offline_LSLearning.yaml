@@ -1,0 +1,64 @@
+# ============================================================
+# Stimulation Protocol
+# ============================================================
+# Target:      LC (locus coeruleus)
+# Mode:        Offline TUS
+# Experiment:  LS Learning
+# Device:      DPX-500 (UMD), 500 kHz — see config/sites/site_UMD_AK.yaml
+# Source:      Same regime as stimulation_aMCC_offline_ErrorMonitoring.yaml,
+#              i.e. Nakajima K et al. (2022) "A causal role of anterior
+#              prefrontal-putamen circuit for response inhibition revealed by
+#              transcranial ultrasound stimulation in humans."
+#              Cell Reports 40(7): 111197. doi:10.1016/j.celrep.2022.111197
+#              Human, deep target, offline — which is why the aMCC settings
+#              carry over here rather than needing an LC-specific source.
+# Used by:     scripts/TUS/notebook/step05_babelbrain.ipynb
+#              scripts/TUS/src/run_babelbrain.py --stim
+#
+# Device is not described here.  Focal range, carrier frequency and the
+# calibration table belong to the transducer YAML named by the site config
+# (config/sites/*.yaml -> config/transducers/*.yaml).  Measured per-subject
+# focal depths belong to the study's status document, not to a protocol file.
+#
+# What changed, and why
+# ---------------------
+# This file previously claimed "Follini et al. (monkey LC, 250 kHz)" while
+# containing DC 0.4 at PRF 2 Hz — the RIKEN CTX-500 lab default, not that
+# paper's protocol, as config/basics/experiment_examples.md states outright
+# ("LS learning — LC: Uses the CTX-500 default settings unchanged"). The
+# citation also carried the wrong carrier: 250 kHz against the DPX-500's 500
+# kHz, so neither the drive nor the transmission transferred. "Follini" was
+# very likely Folloni (D. Folloni, Oxford).
+#
+# Rewritten for the DPX-500 and for human use, matching the aMCC offline
+# protocol exactly, per the user. Nothing of the old parameter set survives.
+#
+# Note this is NOT the regime the Oxford group converged on for human deep
+# targets — Pan (2025), Montenegro (2025) and Algermissen (2026) all use 20 ms
+# every 200 ms, DC 10 %, 80 s, and our hippocampus and EC configs follow them.
+# Two families are in play deliberately; see resources/TUS/manuscripts/README.md.
+# No TUS study targeting LC in humans was found, so neither family has the
+# stronger claim here.
+#
+# Protocol values below are restated for reading; BabelBrain uses the
+# AllDC_PRF_Duration block at the bottom of this file.
+#   Burst length:          30 ms   (= 1000 / PRF x DC = 1000/10 x 0.3)
+#   PRF:                   10 Hz
+#   DC:                    0.3     (30 %)
+#   Duration per cycle:    40 s
+#   DurationOff per cycle: 40 s
+#   Repetitions:            1
+#
+# Field definitions: see stimulation_test_offline_Draft.yaml, which carries the
+# full glossary for BaseIsppa and AllDC_PRF_Duration.
+
+BaseIsppa: 5.0  # W/cm² — planned in-situ ISPPA at focal point; BHTE scaling reference
+
+AllDC_PRF_Duration:
+  - DC: 0.3
+    PRF: 10.0
+    Duration: 40.0
+    DurationOff: 40.0
+    Repetitions: 1
+    NumberGroupedSonications: 1         # no sub-grouping (single continuous burst per cycle)
+    PauseBetweenGroupedSonications: 0.0 # no-op (only 1 group)

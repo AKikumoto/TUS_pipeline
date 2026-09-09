@@ -1,0 +1,5 @@
+# Large reference data from external sources — not version-controlled
+# Download from original sources (OSF, NeuroSynth, etc.) as needed
+Dahl2022_osf/
+metaMask_Dahl2022/*.nii
+*.nii

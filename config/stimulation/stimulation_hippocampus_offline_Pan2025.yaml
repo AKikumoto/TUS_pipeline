@@ -1,0 +1,83 @@
+# ============================================================
+# Stimulation Protocol — Pan et al. (2025), human hippocampus
+# ============================================================
+# Target:      Hippocampus (they also ran the identical regime on a
+#              white-matter control site, so it is not intrinsically
+#              hippocampus-only -- but the filename follows the lab convention
+#              [target]_[first author + year], so reusing it for EC or for
+#              rHipp/cHipp means copying this file under that target's name.
+# Mode:        Offline TUS — stimulate, then perform the task.
+# Source:      Pan D, D'Ambrogio S, Kingston N, Rascu M, Sankhe P, Luo S,
+#              Klein-Flügge MC, Mahmoodi A, Rushworth MFS (2025).
+#              "Causal necessity of human hippocampus for structure-based
+#              inference in learning." bioRxiv 2025.08.19.664920.
+#              PDF: resources/TUS/manuscripts/
+# Used by:     scripts/TUS/notebook/step05_babelbrain.ipynb
+#              scripts/TUS/src/run_babelbrain.py --stim
+#
+# Device is not described here.  Focal range, carrier frequency and the
+# calibration table belong to the transducer YAML named by the site config
+# (config/sites/*.yaml -> config/transducers/*.yaml).  Measured per-subject
+# focal depths belong to the study's status document, not to a protocol file.
+#
+# Why this protocol
+# -----------------
+# It is the closest published match to our setup that exists: the SAME
+# transducer and driver (DPX-500-4CH on a NeuroFUS PRO TPO, 500 kHz, 64 mm),
+# in humans, offline, with the hippocampus as the target. Their in-situ target
+# of ~5 W/cm² is the value our BaseIsppa already uses, so the two are directly
+# comparable rather than merely similar.
+#
+# It is a different lineage from stimulation_aMCC_offline_ErrorMonitoring.yaml
+# and stimulation_LC_offline_LSLearning.yaml, which follow the Folloni-style
+# macaque pattern (30 ms / 100 ms, DC 30 %, 40 s). For human work the DC is a
+# third of that and the duration double. Keep both; do not silently merge them.
+#
+# Device parameters
+#   Pulse duration:        20 ms
+#   Pulse repetition int: 200 ms
+#   PRF:                    5 Hz
+#   DC:                     0.10   (10 %)
+#   Duration:              80 s per hemisphere = 400 pulses
+#   Bilateral:             left then right, sequentially, one hemisphere at a
+#                          time. Simulate ONE hemisphere -- that is what a
+#                          single transducer placement delivers, and the
+#                          hemispheres are not concurrent, so this is the
+#                          thermal load a placement actually sees.
+#   ISPPA free-field:      75 W/cm² at the hippocampus; the white-matter control
+#                          was individualised over 55-75 W/cm² to match in situ.
+#   ISPPA in situ:         ~5 W/cm² (their reported attenuation ~90 %)
+#
+# Their reported safety outcome: MI < 1.9 and thermal dose < 0.25 CEM43,
+# ITRUSST-compliant. Thermal modelling covered the 80 s of stimulation plus a
+# 100 s cool-down, which DurationOff below reproduces.
+#
+# Two operational rules worth carrying over, neither of which lives in this file
+#   1. Aim the beam ALONG THE LONG AXIS of the hippocampus, entering from the
+#      back of the head. That is how they justify "without affecting overlying
+#      tissue": the elongated focus (our -3 dB lobe runs 46-51 mm axially) is
+#      matched to the elongated structure rather than fighting it. Check the
+#      step-4 placement against this before trusting a hippocampal run.
+#   2. Screen on simulated in-situ ISPPA: they excluded anyone below
+#      3 W/cm² bilaterally, losing 9 of 32 scanned subjects. Our pipeline
+#      already reports in-situ intensity, so the rule can be applied directly.
+#
+# For our own subjects, the free-field ISPPA this regime requires is per-subject
+# and is written to *_Summary.csv by write_tpo_summary_BB(). At the time of
+# writing sub-z004 needs 80-86 W/cm² (close to their 75) while sub-z002 needs
+# 105-121 W/cm², above the range they ever drove -- confirm the TPO can deliver
+# it before scheduling that subject.
+#
+# Field definitions: see stimulation_test_offline_Draft.yaml, which
+# carries the full glossary for BaseIsppa and AllDC_PRF_Duration.
+
+BaseIsppa: 5.0  # W/cm² — in-situ ISPPA at focus; matches the paper's ~5 W/cm²
+
+AllDC_PRF_Duration:
+  - DC: 0.1              # 20 ms on per 200 ms period
+    PRF: 5.0
+    Duration: 80.0       # one hemisphere, 400 pulses
+    DurationOff: 100.0   # cool-down they modelled after the 80 s block
+    Repetitions: 1
+    NumberGroupedSonications: 1         # single continuous burst per cycle
+    PauseBetweenGroupedSonications: 0.0 # no-op (only 1 group)

@@ -1,0 +1,112 @@
+# ============================================================
+# Stimulation Protocol
+# ============================================================
+# Target:      Entorhinal cortex (alEC / pmEC, Maass 2015) and dorsal caudate
+#              (dCa_BN); one protocol for both.
+# Mode:        Online TUS, trial-locked, delivered 0-300 ms after the response
+# Experiment:  Rule x stimulus task, two sessions
+# Basis:       Fomenko et al. (2020) eLife 9:e54497: 500 kHz, PRF 1 kHz,
+#              DC 10-50 %, 0.1-0.5 s sonication, in-situ ISPPA 2.32 W/cm2.
+#              The 300 ms sonication is chosen to sit inside the 1200 ms RSI
+#              without overlapping the next cue.  Fomenko saw no MEP
+#              suppression below 0.4 s of sonication, so 300 ms is provisional
+#              until the lab's own timing data say otherwise.
+# Used by:     scripts/TUS/notebook/step05_babelbrain.ipynb
+#
+# Device is not described here.  Focal range, carrier frequency and the
+# calibration table belong to the transducer YAML named by the site config
+# (config/sites/*.yaml -> config/transducers/*.yaml).  Measured per-subject
+# focal depths belong to the study's status document, not to a protocol file.
+#
+# Protocol values below are restated for reading; BabelBrain uses the
+# AllDC_PRF_Duration block at the bottom of this file.
+#   Pulse width:           0.1 ms   (= 1000 / PRF x DC = 1000/1000 x 0.1)
+#   PRF:                   1000 Hz
+#   DC:                    0.1      (10 %)
+#   Duration per cycle:    0.3 s    (one sonication per stimulated trial)
+#   DurationOff per cycle: 1.7 s    (PLACEHOLDER, see below)
+#   Repetitions:           200      (PLACEHOLDER, stimulated trials per session)
+#
+# Task timing (per trial)
+#   RSI  1200 ms   response-to-cue interval; the sonication falls inside it
+#   CSI   300 ms   cue-to-stimulus interval, cue on for 150 ms
+#   TUS   0-300 ms after the response, 300 ms long, so it ends >= 600 ms
+#                  before the next cue at the latest timing
+#
+# Design
+#   TUS timing (0 / 300 ms after response)   between subjects
+#   rule set                                 between subjects
+#   TUS on / off                             within subject, per rule x stimulus cell
+#   Session 2                                no stimulation
+#
+# DurationOff placeholder: one trial is RSI 1200 + CSI 300 + cue-to-response,
+# ~2.0 s with a ~500 ms RT, minus the 0.3 s on.  Replace with the measured
+# mean trial length once the task timing is fixed; only the thermal solve
+# reads it.  Repetitions is the number of stimulated trials in one session,
+# not the total trial count, since only stimulated cells sonicate.
+#
+# ============================================================
+# Glossary
+# ============================================================
+# BaseIsppa    Planned in-situ ISPPA (W/cm²) at the focal point; the reference
+#              intensity for the BHTE thermal solve. Set to your intended
+#              experimental in-situ intensity. BabelBrain scales results linearly
+#              from this value — no re-simulation needed for other power levels.
+#              The TPO takes free-field (in-water) ISPPA as its input, not the
+#              in-situ value, so the two differ by the skull/scalp loss.
+#              write_tpo_summary_BB() back-calculates the per-subject setting
+#              into *_Summary.csv (one row per DC/PRF/Duration combination):
+#                required_freefield_isppa_w_cm2 = BaseIsppa / derating_ratio
+#                required_freefield_ispta_w_cm2 = the above x DC
+#                derating_ratio, derating_dB    = (max |p| in brain /
+#                                                  max |p| in water) ** 2
+#              When the transducer YAML carries calibration.isppa_w_per_cm2
+#              (CTX-500 has it, the UMD DPX-500 does not) the CSV also gives
+#              calibrated_ref_isppa_w_cm2, factor_vs_calibrated_ref,
+#              exceeds_calibrated_ref, and insitu_isppa_at_ref_w_cm2 (the
+#              in-situ ISPPA reachable at the calibrated reference).
+#              Exceeding the reference is reported, not blocked -- the TPO
+#              power limit is adjustable, though the vendor calls operating
+#              above the calibrated range off-label.
+#              Set here to 5 W/cm2, the top of the planned 2.3-5 W/cm2 range;
+#              the thermal result scales linearly, so 2.3 W/cm2 reads as 0.46 x this.
+#
+# AllDC_PRF_Duration  List of protocol variants; each entry runs one BHTE solve.
+#
+#   DC          Duty cycle (0–1): fraction of each pulse period during which
+#               ultrasound is active.  ISPTA = ISPPA × DC.
+#               E.g. DC=0.1, PRF=1000 Hz → 0.1 ms on per 1 ms period.
+#
+#   PRF         Pulse repetition frequency (Hz): number of pulses per second
+#               within the sonication burst.  Controls burst structure, not the
+#               carrier (transducer) frequency.
+#
+#   Duration    Sonication-on duration per cycle (s): how long the device fires
+#               in one on/off repetition.
+#
+#   DurationOff Rest duration per cycle (s): cool-down between repetitions.
+#
+#   Repetitions Number of complete on/off cycles.
+#               Total time = Repetitions × (Duration + DurationOff).
+#               E.g. Repetitions=200, Duration=0.3 s, DurationOff=1.7 s → 400 s.
+#
+#   NumberGroupedSonications
+#               Number of grouped bursts within each Duration block.
+#               1 = single continuous burst per cycle (no sub-grouping).
+#               Required key for BabelBrain CalculateThermalProcess.
+#
+#   PauseBetweenGroupedSonications
+#               Pause between grouped bursts within one Duration block (s).
+#               0.0 when NumberGroupedSonications=1 (no-op).
+#               Required key for BabelBrain CalculateThermalProcess.
+
+BaseIsppa: 5.0  # W/cm² — planned in-situ ISPPA at focal point; BHTE scaling reference
+
+AllDC_PRF_Duration:
+  - DC: 0.1
+    PRF: 1000.0
+    Duration: 0.3          # one sonication per stimulated trial
+    DurationOff: 1.7       # PLACEHOLDER: mean trial length minus 0.3 s
+    Repetitions: 200       # PLACEHOLDER: stimulated trials per session
+    NumberGroupedSonications: 1
+    PauseBetweenGroupedSonications: 0.0

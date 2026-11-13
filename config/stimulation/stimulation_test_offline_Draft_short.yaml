@@ -1,0 +1,88 @@
+# ============================================================
+# Stimulation Protocol
+# ============================================================
+# Target:      Hippocampus (anterior, left; Weizhen 0.05 mask)
+# Mode:        Offline TUS — DRAFT short (40 s subset for thermal backend testing)
+# Experiment:  40-second continuous block — subset of the 200 s worst-case chain.
+#              Used to test BabelBrain thermal backends (Metal/OpenCL hang on 200 s).
+#              For real safety estimation, use stimulation_test_offline_Draft.yaml.
+# Source:      Collaborator (Zane) email 2026-07-22; Duration truncated for testing
+# Used by:     scripts/TUS/notebook/step05_babelbrain.ipynb
+#
+# Device is not described here.  Focal range, carrier frequency and the
+# calibration table belong to the transducer YAML named by the site config
+# (config/sites/*.yaml -> config/transducers/*.yaml).  Measured per-subject
+# focal depths belong to the study's status document, not to a protocol file.
+#
+# Protocol values below are restated for reading; BabelBrain uses the
+# AllDC_PRF_Duration block at the bottom of this file.
+#   Burst length:         60 ms   (= 1000 / PRF × DC = 1000/5 × 0.3)
+#   PRF:                   5 Hz
+#   DC:                  0.3      (30%)
+#   Duration per cycle:   40 s    (subset of 200 s worst-case; for backend testing only)
+#   DurationOff per cycle: 0 s    (no rest between cycles)
+#   Repetitions:           1
+#
+# ============================================================
+# Glossary
+# ============================================================
+# BaseIsppa    Planned in-situ ISPPA (W/cm²) at the focal point; the reference
+#              intensity for the BHTE thermal solve. Set to your intended
+#              experimental in-situ intensity. BabelBrain scales results linearly
+#              from this value — no re-simulation needed for other power levels.
+#              The TPO takes free-field (in-water) ISPPA as its input, not the
+#              in-situ value, so the two differ by the skull/scalp loss.
+#              write_tpo_summary_BB() back-calculates the per-subject setting
+#              into *_Summary.csv (one row per DC/PRF/Duration combination):
+#                required_freefield_isppa_w_cm2 = BaseIsppa / derating_ratio
+#                required_freefield_ispta_w_cm2 = the above x DC
+#                derating_ratio, derating_dB    = (max |p| in brain /
+#                                                  max |p| in water) ** 2
+#              When the transducer YAML carries calibration.isppa_w_per_cm2
+#              (CTX-500 has it, the UMD DPX-500 does not) the CSV also gives
+#              calibrated_ref_isppa_w_cm2, factor_vs_calibrated_ref,
+#              exceeds_calibrated_ref, and insitu_isppa_at_ref_w_cm2 (the
+#              in-situ ISPPA reachable at the calibrated reference).
+#              Exceeding the reference is reported, not blocked -- the TPO
+#              power limit is adjustable, though the vendor calls operating
+#              above the calibrated range off-label.
+#
+# AllDC_PRF_Duration  List of protocol variants; each entry runs one BHTE solve.
+#
+#   DC          Duty cycle (0–1): fraction of each pulse period during which
+#               ultrasound is active.  ISPTA = ISPPA × DC.
+#               E.g. DC=0.3, PRF=5 Hz → 60 ms on per 200 ms period.
+#
+#   PRF         Pulse repetition frequency (Hz): number of pulses per second
+#               within the sonication burst.  Controls burst structure, not the
+#               carrier (transducer) frequency.
+#
+#   Duration    Sonication-on duration per cycle (s): how long the device fires
+#               in one on/off repetition.
+#
+#   DurationOff Rest duration per cycle (s): cool-down between repetitions.
+#               Set to 0.0 for a continuous block with no rest.
+#
+#   Repetitions Number of complete on/off cycles.
+#               Total time = Repetitions × (Duration + DurationOff).
+#
+#   NumberGroupedSonications
+#               Number of grouped bursts within each Duration block.
+#               1 = single continuous burst per cycle (no sub-grouping).
+#               Required key for BabelBrain CalculateThermalProcess.
+#
+#   PauseBetweenGroupedSonications
+#               Pause between grouped bursts within one Duration block (s).
+#               0.0 when NumberGroupedSonications=1 (no-op).
+#               Required key for BabelBrain CalculateThermalProcess.
+
+BaseIsppa: 5.0  # W/cm² — planned in-situ ISPPA at focal point; BHTE scaling reference
+
+AllDC_PRF_Duration:
+  - DC: 0.3
+    PRF: 5.0
+    Duration: 40.0     # 40 s subset — for backend testing only (full protocol = 200 s)
+    DurationOff: 0.0
+    Repetitions: 1
+    NumberGroupedSonications: 1         # no sub-grouping (single continuous burst per cycle)
+    PauseBetweenGroupedSonications: 0.0 # no-op (only 1 group)

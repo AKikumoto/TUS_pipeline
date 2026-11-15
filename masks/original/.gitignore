@@ -1,0 +1,6 @@
+# Large reference data from external sources — not version-controlled
+# Download from original sources (OSF, NeuroSynth, etc.) as needed
+Dahl2022_osf/
+Sato_LCAnalysis_template/
+metaMask_Dahl2022/*.nii
+*.nii

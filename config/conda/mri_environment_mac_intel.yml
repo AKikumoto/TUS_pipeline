@@ -1,0 +1,92 @@
+# mri environment for an Intel (x86_64) Mac: steps 3 to 5 only.
+#
+# SimNIBS 4.5 and later do not support Intel Macs (release notes), so this
+# environment has no SimNIBS. Without it, seg (charm) and the PlanTUS scene
+# (step 4a, prepare_plantus_scene, which reads the head mesh with simnibs.mesh_io)
+# cannot run here. Run those on a machine whose environment has SimNIBS 4.6
+# (mri_environment_mac_arm64.yml on Apple silicon, or Linux), then copy the subject
+# folder here. reg, com, the sweep, BabelBrain and run_status run here.
+#
+# Made from mri_environment_mac_arm64.yml (2026-11-15). Left out: SimNIBS, its
+# arm64-only wheels (fmm3dpy, petsc4py, samseg, cortech), brainnet and
+# brainsynth, torch (needed only by SimNIBS 4.6; no Intel Mac wheel after 2.2.2)
+# and python-mumps (SimNIBS's FEM solver). numba is 0.62.1, the last release
+# with an Intel Mac wheel. Not yet built on an Intel Mac.
+name: mri
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - ants
+  - ipykernel
+  - jsonschema=4.26.0
+  - jupyterlab
+  - matplotlib-base
+  - mpfr=4.2.1
+  - numpy=2.3.0
+  - pip=26.0.1
+  - pyopengl
+  - pytest
+  - requests
+  - setuptools
+  - statsmodels
+  - eigen=3.4.0            # required for pycork build
+  - pip:
+    - gmsh==4.14.0
+    - h5py==3.15.1
+    - numba==0.62.1
+    - pygpc==0.4.4
+    - pyqt5==5.15.11
+    - scipy==1.17.1
+    - matplotlib>=3.9
+    - pandas>=2.0
+    - pynput
+    - patsy>=1.0
+    - statsmodels>=0.14.4
+    - antspyx
+    - nibabel
+    - nilearn
+    - nipype
+    - pybids
+    - templateflow
+    - vtk
+    # BabelBrain (Step 5) — acoustic + thermal simulation
+    - BabelViscoFDTD
+    - git+https://github.com/ProteusMRIgHIFU/py-metal-compute.git  # Metal backend; BabelBrain's own Intel Mac environment has it too
+    - hdf5plugin       # required to read/write BabelBrain .h5 output (compressed datasets)
+    - pyopencl         # OpenCL GPU backend (used by BabelBrain alongside Metal)
+    - simpleitk        # image I/O used internally by BabelBrain
+    - pydicom          # medical imaging I/O (BabelBrain dependency)
+    - linetimer        # BabelBrain utility dependency
+    - num2words        # BabelBrain dependency
+    - pwlf             # piecewise linear fitting (BabelBrain dependency)
+    - itables
+    - openpyxl
+    # BabelBrain (Step 5) — mesh processing dependencies
+    - trimesh          # 3-D mesh I/O and processing (CalculateMaskProcess)
+    - pymeshfix        # mesh repair (CalculateMaskProcess)
+    - pyvista          # 3-D mesh/volume visualisation (BabelBrain dependency)
+    - histoprint       # terminal histogram display (BabelBrain utility)
+    - scikit-image     # image processing utilities (BabelBrain dependency)
+    - manifold3d       # manifold mesh operations (BabelBrain dependency)
+    - numpy-stl        # STL mesh I/O (BabelBrain dependency)
+
+# ⚠️  POST-INSTALL STEPS REQUIRED (cannot be automated via YML):
+#
+# 1. pycork (pybind11 must be upgraded manually for Python 3.11):
+#    brew install gmp
+#    cd ~
+#    git clone https://github.com/drlukeparry/pycork.git
+#    cd pycork
+#    git checkout d9efcd1da212c685345f65503ba253373dcdece0
+#    git submodule update --init --recursive
+#    cd external/pybind11 && git fetch && git checkout v2.11.0 && cd ../..
+#    pip install .
+#
+# 2. BabelBrain (no pyproject.toml — install via PYTHONPATH):
+#    cd ~
+#    git clone https://github.com/ProteusMRIgHIFU/BabelBrain.git
+#    echo "export BABELBRAIN_DIR=~/BabelBrain" >> ~/.zshrc
+#    echo "export PYTHONPATH=~/BabelBrain:\$PYTHONPATH" >> ~/.zshrc
+#    source ~/.zshrc
